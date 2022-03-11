@@ -1,0 +1,17 @@
+name: deploy-to-octopus
+
+on:
+  workflow_call:
+    inputs:
+      username:
+        required: true
+        type: string
+    secrets:
+      token:
+        required: true
+
+jobs:
+  example_job:
+    steps:
+    - name: Set build version 
+       run: echo Hello, world!
