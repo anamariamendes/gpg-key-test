@@ -44,9 +44,9 @@ jobs:
    - name: Test
      run: dotnet test --no-build -c Release --verbosity normal
 
- deploy:
-     uses: anamariamendes/gpg-key-test/.github/workflows/deploy-to-octopus.yml@master
-     with:
-       username: mona
-     secrets:
-       token: ${{ env.BUILD_VERSION }}
+ #deploy:
+  #   uses: anamariamendes/gpg-key-test/.github/workflows/deploy-to-octopus.yml@master
+   #  with:
+    #   username: mona
+     #secrets:
+      # token: ${{ env.BUILD_VERSION }}
