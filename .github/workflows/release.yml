@@ -7,10 +7,11 @@ on:
   #  tags:
   #    - 'v*'
 
+
 jobs:
  release:
    runs-on: ubuntu-latest
-
+   
    steps:
    - uses: actions/checkout@v2
      with:
@@ -30,14 +31,14 @@ jobs:
        versionSpec: '5.x'
        
    - name: Determine version
-     id: gitversion
      uses: gittools/actions/gitversion/execute@v0.9.9
      with: 
        useConfigFile: true
 
    - name: Set build version 
+     id: base_config_data
      run: echo "BUILD_VERSION=${{steps.gitversion.outputs.SemVer}}" >> $GITHUB_ENV
-
+      
    - name: Build
      run: dotnet build --no-restore -c Release -p:Version=${{ env.BUILD_VERSION }}
 
@@ -47,3 +48,18 @@ jobs:
    - name: Set version
      run: echo ${{ env.BUILD_VERSION }} > build-version.txt
      
+   - name: Upload artifcat
+     uses: actions/upload-artifact@v2
+     with:
+         name: Release_Nome_do_Package_${{ env.BUILD_VERSION }}
+         path: build-version.txt  
+   outputs:
+    build_version: ${{ env.BUILD_VERSION }}
+    package_name: "Nome_do_Package"
+      
+ deploy:
+  needs: [release]
+  uses: ./.github/workflows/deploy.yml
+  with:
+    package_name:  ${{ needs.release.outputs.package_name }}
+    build_version: ${{ needs.release.outputs.build_version }}
