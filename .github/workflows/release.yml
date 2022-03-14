@@ -39,9 +39,6 @@ jobs:
    - name: Set build version 
      id: base_config_data
      run: echo "BUILD_VERSION=${{steps.gitversion.outputs.SemVer}}" >> $GITHUB_ENV
-     outputs:
-      build_version: ${{ env.BUILD_VERSION }}
-      package_name: "TestPackageName"
       
    - name: Build
      run: dotnet build --no-restore -c Release -p:Version=${{ env.BUILD_VERSION }}
@@ -57,7 +54,10 @@ jobs:
      with:
          name: Release
          path: build-version.txt  
-     
+   outputs:
+    build_version: ${{ env.BUILD_VERSION }}
+    package_name: "TestPackageName"
+      
  deploy:
   needs: [release]
   uses: ./.github/workflows/deploy.yml
