@@ -3,7 +3,7 @@ name: deploy
 on:
   workflow_call:
     inputs:
-      build_version:
+      package_name:
         required: true
         type: string
 
@@ -12,8 +12,12 @@ jobs:
     runs-on: ubuntu-latest
     if: always()   
     steps:
+      - name: Download Artifacts
+        uses: actions/download-artifact@v2
+        with:
+          name: Release
+
       - name: Set version environment variable
-        run: |
-           echo "VERSION=${{ inputs.build_version }}" >> $GITHUB_ENV
-           echo ${{ inputs.build_version }}
+        run: echo ${{ inputs.package_name}}
+      
       

@@ -52,4 +52,4 @@ jobs:
   needs: [release]
   uses: ./.github/workflows/deploy.yml
   with:
-    build_version: echo "VERSION=$( cat build-version.txt )" >> $GITHUB_ENV
+    package_name: "TestPackageName"
