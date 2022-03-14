@@ -1,0 +1,19 @@
+name: deploy
+
+on:
+  workflow_call:
+    inputs:
+      build_version:
+        required: true
+        type: string
+
+jobs:
+  deploy:
+    runs-on: self-hosted
+       
+    steps:
+      - name: Set version environment variable
+        run: |
+           echo "VERSION=${{ inputs.build_version }}" >> $GITHUB_ENV
+           echo ${{ inputs.build_version }}
+      
