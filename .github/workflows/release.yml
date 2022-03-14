@@ -13,6 +13,7 @@ jobs:
    runs-on: ubuntu-latest
    env:
     PACKAGE_NAME: "Test"
+    
    steps:
    - uses: actions/checkout@v2
      with:
@@ -52,11 +53,11 @@ jobs:
    - name: Upload artifcat
      uses: actions/upload-artifact@v2
      with:
-         name: Release_${{ PACKAGE_NAME }}_${{ env.BUILD_VERSION }}
+         name: Release_$PACKAGE_NAME_${{ env.BUILD_VERSION }}
          path: build-version.txt  
    outputs:
     build_version: ${{ env.BUILD_VERSION }}
-    package_name:  ${{ PACKAGE_NAME }}
+    package_name:  $PACKAGE_NAME 
       
  deploy:
   needs: [release]
