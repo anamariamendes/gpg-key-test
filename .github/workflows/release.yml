@@ -50,6 +50,6 @@ jobs:
      
  deploy:
   needs: [release]
-  uses: ./.github/workflows/deploy.yml@master
+  uses: ./.github/workflows/deploy.yml
   with:
     username: $( cat build-version.txt )
