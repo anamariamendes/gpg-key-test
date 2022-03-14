@@ -6,7 +6,9 @@ on:
       package_name:
         required: true
         type: string
-
+      build_version:
+        required: true
+        type: string
 jobs:
   deploy:
     runs-on: ubuntu-latest

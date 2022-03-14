@@ -37,8 +37,12 @@ jobs:
        useConfigFile: true
 
    - name: Set build version 
+     id: base_config_data
      run: echo "BUILD_VERSION=${{steps.gitversion.outputs.SemVer}}" >> $GITHUB_ENV
-
+     outputs:
+      build_version: ${{ env.BUILD_VERSION }}
+      package_name: "TestPackageName"
+      
    - name: Build
      run: dotnet build --no-restore -c Release -p:Version=${{ env.BUILD_VERSION }}
 
@@ -48,8 +52,15 @@ jobs:
    - name: Set version
      run: echo ${{ env.BUILD_VERSION }} > build-version.txt
      
+   - name: Upload artifcat
+     uses: actions/upload-artifact@v2
+     with:
+         name: Release
+         path: build-version.txt  
+     
  deploy:
   needs: [release]
   uses: ./.github/workflows/deploy.yml
   with:
-    package_name: "TestPackageName"
+    package_name:  ${{ needs.release.outputs.package_name }}
+    build_version: ${{ needs.release.outputs.build_version }}
