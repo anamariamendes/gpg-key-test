@@ -31,12 +31,12 @@ jobs:
        versionSpec: '5.x'
        
    - name: Determine version
+     id: gitversion             
      uses: gittools/actions/gitversion/execute@v0.9.9
      with: 
        useConfigFile: true
 
    - name: Set build version 
-     id: base_config_data
      run: echo "BUILD_VERSION=${{steps.gitversion.outputs.SemVer}}" >> $GITHUB_ENV
       
    - name: Build
