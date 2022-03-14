@@ -1,0 +1,20 @@
+name: deploy
+
+on:
+  workflow_call:
+    inputs:
+      package_name:
+        required: true
+        type: string
+      build_version:
+        required: true
+        type: string
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    if: always()   
+    steps:
+      - name: Set version environment variable
+        run: echo "Release_${{ inputs.package_name }}_${{ inputs.build_version }}"
+      
+      
