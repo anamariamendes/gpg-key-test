@@ -50,6 +50,6 @@ jobs:
      
  deploy:
   needs: [release]
-  uses: ./gpg-key-test/.github/workflows/deploy.yml
+  uses: ./gpg-key-test/.github/workflows/deploy.yml@master
   with:
     username: $( cat build-version.txt )
