@@ -7,12 +7,14 @@ on:
   #  tags:
   #    - 'v*'
 
-env:
-  PACKAGE_NAME: Monday
 
 jobs:
  release:
    runs-on: ubuntu-latest
+   env:
+    PACKAGE_NAME: "Package_name_test"
+    BUILD_VERSION: 0
+    
    steps:
    - uses: actions/checkout@v2
      with:
@@ -52,11 +54,11 @@ jobs:
    - name: Upload artifcat
      uses: actions/upload-artifact@v2
      with:
-         name: Release_${{PACKAGE_NAME}}_${{ env.BUILD_VERSION }}
+         name: Release_${{ env.PACKAGE_NAME }}_${{ env.BUILD_VERSION }}
          path: build-version.txt  
    outputs:
     build_version: ${{ env.BUILD_VERSION }}
-    package_name: ${{ PACKAGE_NAME }}
+    package_name: ${{ env.PACKAGE_NAME }}
       
  deploy:
   needs: [release]
