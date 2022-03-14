@@ -11,7 +11,8 @@ on:
 jobs:
  release:
    runs-on: ubuntu-latest
-
+   env:
+    package_name: "Package_name_test"
    steps:
    - uses: actions/checkout@v2
      with:
@@ -31,7 +32,6 @@ jobs:
        versionSpec: '5.x'
        
    - name: Determine version
-     id: gitversion
      uses: gittools/actions/gitversion/execute@v0.9.9
      with: 
        useConfigFile: true
@@ -52,11 +52,11 @@ jobs:
    - name: Upload artifcat
      uses: actions/upload-artifact@v2
      with:
-         name: Release
+         name: Release_${{ jobs.release.env.package_name }}_${{ env.BUILD_VERSION }}
          path: build-version.txt  
    outputs:
     build_version: ${{ env.BUILD_VERSION }}
-    package_name: "TestPackageName"
+    package_name: ${{ jobs.release.env.package_name }}
       
  deploy:
   needs: [release]
