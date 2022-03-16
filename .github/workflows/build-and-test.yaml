@@ -44,8 +44,8 @@ jobs:
    - name: Test
      run: dotnet test --no-build -c Release --verbosity normal
 
-   #- name: Set version
-   #  run: echo ${{steps.gitversion.outputs.SemVer}} > build-version.txt
+   - name: Set version
+     run: echo ${{steps.gitversion.outputs.SemVer}} > build-version.txt
    outputs:
     build_version: ${{ steps.gitversion.outputs.SemVer }}
     
@@ -64,7 +64,7 @@ jobs:
          path: build-version.txt  
    outputs:
     build_version: ${{ steps.gitversion.outputs.SemVer }}
-    package_name: ${{env.PACKAGE_NAME}}
+    package_name: ${{env.PACKAGE_NAME1}}
     
  deploy:
   needs: [release]
