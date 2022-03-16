@@ -12,7 +12,7 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    if: always()   
+    if: allways() && (contains(github.ref, '/heads/master') || contains(github.ref, '/tags/v'))
     steps:
       - name: Set version environment variable
         run: echo "Release_${{ inputs.package_name }}_${{ inputs.build_version }}"
