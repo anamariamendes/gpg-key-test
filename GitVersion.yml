@@ -3,27 +3,18 @@ mode: Mainline
 tag-prefix: '[vV]'
 branches:
   feature: 
-    tag: 'alpha'
-    increment: patch
+    increment: minor
   bugfix: 
     regex: ^bugfix
     source-branches: [ master ]
-    tag: 'alpha'
     increment: patch
   hotfix: 
     regex: ^hotfix
     source-branches: [ master ]
-    tag: 'alpha'
     increment: patch
-  pull-request:
+  pull-request: 
     regex: (^pull|pull\-requests|pr)[/-]
     tag-number-pattern: ''
-    tag: 'alpha'
     increment: patch
   master:
-    regex: (^master$|^origin\/master$)
-    tag: ''
-    increment: minor
-ignore:
-  sha: []
-merge-message-formats: {}
+    is-mainline: true
