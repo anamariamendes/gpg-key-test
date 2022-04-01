@@ -5,9 +5,6 @@ on:
   push:
     branches: 
       - '**'        # matches every branch
-      - '!master'   # excludes master
-    # don't run on tags
-    tags: "!*"
 
 env:
   DOTNET_NOLOGO: true
@@ -42,31 +39,3 @@ jobs:
      uses: gittools/actions/gitversion/execute@v0.9.9
      with: 
        useConfigFile: true
-      
-   - name: Build
-     run: dotnet build --no-restore -c Release -p:Version=${{ steps.gitversion.outputs.SemVer }}
-
-   - name: Test
-     run: dotnet test --no-build -c Release --verbosity normal
-
-   - name: Set version
-     run: echo ${{steps.gitversion.outputs.SemVer}} > build-version.txt
-
-#the next steps only run if it's a master or a tav v*
-   - name: Upload artifcat
-     if: (contains(github.ref, '/heads/master') || contains(github.ref, '/tags/v'))
-     uses: actions/upload-artifact@v2
-     with:
-         name: "Release_${{env.PACKAGE_NAME}}_${{ steps.gitversion.outputs.SemVer }}"
-         path: build-version.txt  
-         
-   outputs:
-    build_version: ${{ steps.gitversion.outputs.SemVer }}
-    package_name: ${{env.PACKAGE_NAME}}
-    
- deploy:
-  needs: [release]
-  uses: ./.github/workflows/deploy.yml
-  with:
-    package_name:  ${{ needs.release.outputs.package_name }}
-    build_version: ${{ needs.release.outputs.build_version }}
