@@ -2,8 +2,8 @@ name: build-and-test
 on:
   push:
     branches:    
-      - '**'        # matches every branch
-      - '!master'   # excludes master
+      - "**"        # matches every branch
+      - "!master"   # excludes master
     tags: "!*"      # don't run on tags
   workflow_dispatch:
   
