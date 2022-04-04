@@ -6,11 +6,11 @@ branches:
     increment: minor
   bugfix: 
     regex: ^bugfix
-    source-branches: [ master ]
+    source-branches: [master]
     increment: patch
   hotfix: 
     regex: ^hotfix
-    source-branches: [ master ]
+    source-branches: [master]
     increment: patch
   pull-request: 
     regex: (^pull|pull\-requests|pr)[/-]
