@@ -12,10 +12,7 @@ branches:
   hotfix: 
     regex: ^hotfix(es)?[/-]
     source-branches: [master]
-    increment: patch
-  pull-request: 
-    regex: (^pull|pull\-requests|pr)[/-]
-    tag-number-pattern: ''
+    tag: useBranchName
     increment: patch
   master:
     is-mainline: true
