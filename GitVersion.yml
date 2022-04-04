@@ -3,13 +3,14 @@ mode: Mainline
 tag-prefix: '[vV]'
 branches:
   feature: 
+    regex: ^feature(s)?[/-]
     increment: minor
   bugfix: 
     regex: ^bugfix(es)?[/-]
     source-branches: [master]
     increment: patch
   hotfix: 
-    regex: ^hotfix
+    regex: ^hotfix(es)?[/-]
     source-branches: [master]
     increment: patch
   pull-request: 
