@@ -5,7 +5,7 @@ branches:
   feature: 
     increment: minor
   bugfix: 
-    regex: ^bugfix
+    regex: ^bugfix(es)?[/-]
     source-branches: [master]
     increment: patch
   hotfix: 
