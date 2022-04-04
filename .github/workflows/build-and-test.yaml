@@ -1,7 +1,9 @@
 name: build-and-test
 on:
   push:
-    branches: "!master"   # run all branches, except master
+    branches:    
+      - '**'        # matches every branch
+      - '!master'   # excludes master
     tags: "!*"      # don't run on tags
   workflow_dispatch:
   
@@ -35,4 +37,4 @@ jobs:
         uses: gittools/actions/gitversion/execute@v0.9.9
         with: 
          useConfigFile: true
-        
+         
