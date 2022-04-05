@@ -13,6 +13,9 @@ env:
 jobs:
   build:
     runs-on: ubuntu-latest     
+    env:
+     PACKAGE_NAME: "Teste"
+     
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -42,6 +45,27 @@ jobs:
 
       - name: Build
         run: dotnet build --no-restore -c Release -p:Version=${{  steps.gitversion.outputs.SemVer }}
+        
+      - name: Publish Api
+        run: dotnet publish  -c Release --self-contained --nologo -p:PublishTrimmed=true --output publish/ -r linux-x64
+      
+      - name: Zip artifacts
+        uses: vimtor/action-zip@v1
+        with:
+         dest: ${{env.PACKAGE_NAME}}.${{ steps.gitversion.outputs.SemVer }}.zip
+         files: publish/
+      
+      - name: Upload artifcat
+        uses: actions/upload-artifact@v2
+        with:
+         name: "Release_${{env.PACKAGE_NAME}}_${{ steps.gitversion.outputs.SemVer }}"
+         path: ${{env.PACKAGE_NAME}}.${{ steps.gitversion.outputs.SemVer }}.zip    
+            
+      - name: Tagging
+        uses: rickstaa/action-create-tag@v1
+        with:
+         tag: v${{ steps.gitversion.outputs.SemVer }}
+         message: "v${{ steps.gitversion.outputs.SemVer }}"
 
       - name: Tagging
         uses: rickstaa/action-create-tag@v1
