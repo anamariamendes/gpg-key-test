@@ -68,7 +68,7 @@ jobs:
          message: "v${{ steps.gitversion.outputs.SemVer }}"
   deploy:
    needs: [build]
-   uses: anamariamendes/gpg-key-test/.github/workflows/deploy.yaml@master
+   uses: anamariamendes/gpg-key-test/.github/workflows/deploy.yml@master
    with:
     release_identification:  "teste"
     packages_octopus: "dsfddd"
