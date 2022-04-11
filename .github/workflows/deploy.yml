@@ -3,18 +3,40 @@ name: deploy
 on:
   workflow_call:
     inputs:
-      package_name:
+      release_identification:
         required: true
         type: string
-      build_version:
+      packages_octopus:
         required: true
         type: string
+      packages_github:
+        required: false
+        type: string
+      packages_tswbin:
+        required: false
+        type: string
+    secrets:
+       OCTOPUS_API_KEY:
+        required: true    
+       OCTOPUS_SERVER:
+        required: true
+       GITHUB_TOKEN:
+        required: false          
 jobs:
   deploy:
-    runs-on: ubuntu-latest
-    if: always() && (contains(github.ref, '/heads/master') || contains(github.ref, '/tags/v'))
+    runs-on: self-hosted
+    if: always()   
     steps:
-      - name: Set version environment variable
-        run: echo "Release_${{ inputs.package_name }}_${{ inputs.build_version }}"
-      
-      
+      - name: Download Artifacts
+        uses: actions/download-artifact@v2
+        with:
+          name: "${{ inputs.release_identification }}"
+
+      - name: Publish packages to GITHUB
+        if: "${{ inputs.packages_github != '' }}"
+        run: |
+            IFS="," read -a packagesGithub <<< ${{ inputs.packages_github }}
+            for i in "${packagesGithub[@]}"; do
+              echo "Value: ${i}"
+              dotnet nuget push "${i}" --api-key ${{ secrets.GITHUB_TOKEN }} --source "github" 
+            done

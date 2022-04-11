@@ -2,8 +2,8 @@ name: release
 on:
 
   push:
-    branches: "master"
-    tags: "!*"
+    branches: "**"
+   # tags: "!*"
   workflow_dispatch:
   
 env:
@@ -66,9 +66,13 @@ jobs:
         with:
          tag: v${{ steps.gitversion.outputs.SemVer }}
          message: "v${{ steps.gitversion.outputs.SemVer }}"
-
-      - name: Tagging
-        uses: rickstaa/action-create-tag@v1
-        with:
-         tag: v${{ steps.gitversion.outputs.SemVer }}
-         message: "v${{ steps.gitversion.outputs.SemVer }}"
+  deploy:
+   needs: [build]
+   uses: deploy.yaml@master
+   with:
+    release_identification:  "teste"
+    packages_octopus: "dsfddd"
+    packages_github: "oi.nupkg,oi2.nupkg"
+   secrets:
+    OCTOPUS_API_KEY: "dvfddfddf"
+    OCTOPUS_SERVER: "dsfddf"
