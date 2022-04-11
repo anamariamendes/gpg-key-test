@@ -22,7 +22,7 @@ on:
         required: true      
 jobs:
   deploy:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest     
     if: always()   
     steps:
       - name: Download Artifacts
