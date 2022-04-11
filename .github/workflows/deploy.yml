@@ -19,9 +19,7 @@ on:
        OCTOPUS_API_KEY:
         required: true    
        OCTOPUS_SERVER:
-        required: true
-       GITHUB_TOKEN:
-        required: false          
+        required: true      
 jobs:
   deploy:
     runs-on: self-hosted
