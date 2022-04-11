@@ -72,7 +72,6 @@ jobs:
    with:
     release_identification:  "teste"
     packages_octopus: "dsfddd"
-    packages_github: "oi.nupkg,oi2.nupkg"
    secrets:
     OCTOPUS_API_KEY: "dvfddfddf"
     OCTOPUS_SERVER: "dsfddf"

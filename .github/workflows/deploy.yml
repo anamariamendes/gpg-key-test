@@ -30,6 +30,5 @@ jobs:
         run: |
             IFS="," read -a packagesGithub <<< ${{ inputs.packages_github }}
             for i in "${packagesGithub[@]}"; do
-              echo "Value: ${i}"
               dotnet nuget push "${i}" --api-key ${{ secrets.GITHUB_TOKEN }} --source "github" 
             done
