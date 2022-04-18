@@ -33,7 +33,6 @@ jobs:
       
       # Bump version on merging Pull Requests with specific labels.
       # (bump:major,bump:minor,bump:patch)
-      - name: Bump version on merging Pull Requests
       - id: bumpr
         uses: haya14busa/action-bumpr@v1
         
