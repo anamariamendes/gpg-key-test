@@ -1,11 +1,10 @@
 name: release
 on:
-
   push:
-    branches: "**"
-   # tags: "!*"
+    branches: "master"
+    tags: "!*"
   workflow_dispatch:
-  
+
 env:
   DOTNET_NOLOGO: true
   DOTNET_CLI_TELEMETRY_OPTOUT: true
@@ -28,17 +27,31 @@ jobs:
           dotnet-version: 6.0.x
         env:
           NUGET_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Install GitVersion
-        uses: gittools/actions/gitversion/setup@v0.9.9
+      
+      - uses: actions/checkout@v2
+      - uses: jefflinse/pr-semver-bump@v1
+        name: Bump and Tag Version
         with:
-         versionSpec: '5.x'
-       
-      - name: Determine version
-        id: gitversion
-        uses: gittools/actions/gitversion/execute@v0.9.9
-        with: 
-         useConfigFile: true
+          mode: bump
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          major-label: major release
+          minor-label: minor release
+          patch-label: patch release
+          require-release-notes: true
+          release-notes-prefix: ''
+          release-notes-suffix: ''
+          with-v: false
+
+    #  - name: Install GitVersion
+    #    uses: gittools/actions/gitversion/setup@v0.9.9
+    #    with:
+    #     versionSpec: '5.x'
+    #     
+    #  - name: Determine version
+    #    id: gitversion
+    #    uses: gittools/actions/gitversion/execute@v0.9.9
+    #    with: 
+    #     useConfigFile: true
          
       - name: Restore dependencies
         run: dotnet restore
@@ -61,17 +74,17 @@ jobs:
          name: "Release_${{env.PACKAGE_NAME}}_${{ steps.gitversion.outputs.SemVer }}"
          path: ${{env.PACKAGE_NAME}}.${{ steps.gitversion.outputs.SemVer }}.zip    
             
-      - name: Tagging
-        uses: rickstaa/action-create-tag@v1
-        with:
-         tag: v${{ steps.gitversion.outputs.SemVer }}
-         message: "v${{ steps.gitversion.outputs.SemVer }}"
-  deploy:
-   needs: [build]
-   uses: anamariamendes/gpg-key-test/.github/workflows/deploy.yml@master
-   with:
-    release_identification:  "teste"
-    packages_octopus: "dsfddd"
-   secrets:
-    OCTOPUS_API_KEY: "dvfddfddf"
-    OCTOPUS_SERVER: "dsfddf"
+    # - name: Tagging
+    #   uses: rickstaa/action-create-tag@v1
+    #   with:
+    #    tag: v${{ steps.gitversion.outputs.SemVer }}
+    #    message: "v${{ steps.gitversion.outputs.SemVer }}"
+#  deploy:
+#   needs: [build]
+#   uses: anamariamendes/gpg-key-test/.github/workflows/deploy.yml@master
+#   with:
+#    release_identification:  "teste"
+#    packages_octopus: "dsfddd"
+#   secrets:
+#    OCTOPUS_API_KEY: "dvfddfddf"
+#    OCTOPUS_SERVER: "dsfddf"
