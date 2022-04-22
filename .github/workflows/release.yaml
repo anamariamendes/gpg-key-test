@@ -30,30 +30,18 @@ jobs:
           dotnet-version: 6.0.x
         env:
           NUGET_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      
-      # Bump version on merging Pull Requests with specific labels.
-      # (bump:major,bump:minor,bump:patch)
-      - id: bumpr
-        uses: haya14busa/action-bumpr@v1
-        
-      # Update corresponding major and minor tag.
-      # e.g. Update v1 and v1.2 when releasing v1.2.3
-      - uses: haya14busa/action-update-semver@v1
-        if: "!steps.bumpr.outputs.skip"
-        with:
-          github_token: ${{ secrets.github_token }}
-          tag: ${{ steps.bumpr.outputs.next_version }}
+     
           
-    #  - name: Install GitVersion
-    #    uses: gittools/actions/gitversion/setup@v0.9.9
-    #    with:
-    #     versionSpec: '5.x'
-    #     
-    #  - name: Determine version
-    #    id: gitversion
-    #    uses: gittools/actions/gitversion/execute@v0.9.9
-    #    with: 
-    #     useConfigFile: true
+      - name: Install GitVersion
+        uses: gittools/actions/gitversion/setup@v0.9.9
+        with:
+         versionSpec: '5.x'
+         
+      - name: Determine version
+        id: gitversion
+        uses: gittools/actions/gitversion/execute@v0.9.9
+        with: 
+         useConfigFile: true
          
       - name: Restore dependencies
         run: dotnet restore
