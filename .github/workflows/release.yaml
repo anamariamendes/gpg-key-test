@@ -30,7 +30,6 @@ jobs:
           dotnet-version: 6.0.x
         env:
           NUGET_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-     
           
       - name: Install GitVersion
         uses: gittools/actions/gitversion/setup@v0.9.9
@@ -47,7 +46,7 @@ jobs:
         run: dotnet restore
 
       - name: Build
-        run: dotnet build --no-restore -c Release -p:Version=${{  steps.bumpr.outputs.next_version  }}
+        run: dotnet build --no-restore -c Release -p:Version=${{  steps.gitversion.outputs.SemVer  }}
         
       - name: Publish Api
         run: dotnet publish  -c Release --self-contained --nologo -p:PublishTrimmed=true --output publish/ -r linux-x64
@@ -55,24 +54,19 @@ jobs:
       - name: Zip artifacts
         uses: vimtor/action-zip@v1
         with:
-         dest: ${{env.PACKAGE_NAME}}.${{ steps.bumpr.outputs.next_version  }}.zip
+         dest: ${{env.PACKAGE_NAME}}.${{ steps.gitversion.outputs.SemVer  }}.zip
          files: publish/
       
       - name: Upload artifcat
         uses: actions/upload-artifact@v2
         with:
-         name: "Release_${{env.PACKAGE_NAME}}_${{ steps.bumpr.outputs.next_version  }}"
-         path: ${{env.PACKAGE_NAME}}.${{ steps.bumpr.outputs.next_version  }}.zip    
+         name: "Release_${{env.PACKAGE_NAME}}_${{ steps.gitversion.outputs.SemVer  }}"
+         path: ${{env.PACKAGE_NAME}}.${{ steps.gitversion.outputs.SemVer  }}.zip    
             
-    # - name: Tagging
-    #   uses: rickstaa/action-create-tag@v1
-    #   with:
-    #    tag: v${{ steps.bumpr.outputs.next_version  }}
-    #    message: "v${{ steps.bumpr.outputs.next_version  }}"
       - name: Tagging
         run: |
-          git tag v${{ steps.bumpr.outputs.next_version  }}
-          git push origin v${{ steps.bumpr.outputs.next_version  }}
+          git tag v${{ steps.gitversion.outputs.SemVer  }}
+          git push origin v${{ steps.gitversion.outputs.SemVer  }}
           
 #  deploy:
 #   needs: [build]
