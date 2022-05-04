@@ -1,0 +1,59 @@
+name: Build
+
+on:
+  # Triggers the workflow on push or pull request events but only for the master branch
+  push:
+    branches-ignore: "master"
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+env:
+  DOTNET_NOLOGO: true
+  DOTNET_CLI_TELEMETRY_OPTOUT: true
+
+jobs:
+  build:
+    # The type of runner that the job will run on
+    #runs-on: ubuntu-latest
+    runs-on: windows-latest
+
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+  #    - uses: actions/checkout@v3
+  #    - uses: actions/setup-node@v3
+  #    - name: NPM install packages
+  #      run: npm install
+  #      working-directory: TSW.ConfigurationManagement.Web\TSWConfig
+
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 14
+      - run: npm install
+        
+      - name: Build frontend
+        run: npm run build
+        working-directory: TSW.ConfigurationManagement.Web\TSWConfig            
+             
+      - name: Nuget Restore
+        run: .\.nuget\nuget.exe restore
+        shell: powershell
+        
+      - name: Add msbuild to PATH
+        uses: microsoft/setup-msbuild@v1.1
+      
+      - name: MSBuild
+        run: msbuild 'TSW.ConfigurationManagement.sln' /m /t:Clean,Build /p:RunOctoPack=true /p:OctoPackEnforceAddingFiles=true /p:OctoPackPublishPackageToFileShare=${{ github.workspace }}
+                       
+      - name: Test With Coverage
+        run: ./TestWithCoverage.ps1
+        shell: powershell
+        
+      - name: Generate Coverage Report
+        run: ./GenerateCoverageReport.ps1
+        shell: powershell
+      
+      - name: Pack Nuget
+        run: ./PackNuget.ps1 -BranchName ${{ env.Build.SourceBranchName }}
+        shell: powershell
